@@ -5,8 +5,10 @@ import android.net.NetworkCapabilities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.recyclerviewproject.adapters.RecyclerAdapter
 import com.example.recyclerviewproject.databinding.ActivityMainBinding
 import com.example.recyclerviewproject.network.DataApi
 import com.example.recyclerviewproject.network.RemoteDataSource
@@ -18,20 +20,25 @@ class MainActivity : AppCompatActivity() {
     //    private val repository:DataRepository
     lateinit var binding: ActivityMainBinding
     lateinit var viewModel: DataViewModel
+    lateinit var recyclerAdapter: RecyclerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
+        recyclerAdapter = RecyclerAdapter()
+        binding.recyclerView.adapter=recyclerAdapter
         val factory = ViewModelFactory(DataRepository(RemoteDataSource.buildApi(DataApi::class.java)))
         viewModel = ViewModelProvider(this, factory).get(DataViewModel::class.java)
 
         viewModel.incomingData.observe(this, Observer {
-            Log.i("MainActivity","onCreate: $it")
             Log.d("Internet Connectivity","${isOnline()}")
-
+            when(it){
+                is Resource.Success -> {
+                    recyclerAdapter.setData(it.value.data)
+                }
+            }
         })
 
         binding.buttonFetch.setOnClickListener {
