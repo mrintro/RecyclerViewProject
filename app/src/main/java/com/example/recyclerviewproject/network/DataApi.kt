@@ -6,7 +6,6 @@ import retrofit2.http.GET
 
 interface DataApi {
 
-    @FormUrlEncoded
     @GET("public/v1/users")
     suspend fun getDataFromApi() : userData
 
