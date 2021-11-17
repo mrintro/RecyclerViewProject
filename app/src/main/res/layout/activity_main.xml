@@ -11,12 +11,25 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         tools:ignore="MissingConstraints">
-        <Button
-            android:id="@+id/buttonFetch"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/fetch_users"
-            />
+            android:orientation="horizontal"
+            tools:ignore="MissingConstraints">
+            <Button
+                android:id="@+id/buttonFetch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fetch_users"
+                />
+            <Button
+                android:id="@+id/clearButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/clean_users"
+                android:layout_marginStart="10dp"
+                />
+        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/recyclerViewContainer"

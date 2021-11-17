@@ -1,5 +1,6 @@
 package com.example.recyclerviewproject
 
+import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +15,7 @@ import com.example.recyclerviewproject.network.DataApi
 import com.example.recyclerviewproject.network.RemoteDataSource
 import com.example.recyclerviewproject.network.Resource
 import com.example.recyclerviewproject.repository.DataRepository
+import com.google.gson.Gson
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,7 +29,19 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-        recyclerAdapter = RecyclerAdapter()
+        var sharedPref = getSharedPreferences(R.string.data_path.toString(), Context.MODE_PRIVATE)
+
+        val gson = Gson()
+        val Json = sharedPref.getString("Saved Data",null)
+
+        if (Json != null) {
+            Log.d("Shared Pref", Json)
+        }else{
+            Log.d("Shared Pref", "JSON EMPTY")
+        }
+
+
+        recyclerAdapter = RecyclerAdapter(this)
         binding.recyclerView.adapter=recyclerAdapter
         val factory = ViewModelFactory(DataRepository(RemoteDataSource.buildApi(DataApi::class.java)))
         viewModel = ViewModelProvider(this, factory).get(DataViewModel::class.java)
@@ -44,6 +58,9 @@ class MainActivity : AppCompatActivity() {
         binding.buttonFetch.setOnClickListener {
             Log.i("Button Hit","Button Hit")
             viewModel.getDataFromApi()
+        }
+        binding.clearButton.setOnClickListener{
+            recyclerAdapter.clearData()
         }
     }
 
