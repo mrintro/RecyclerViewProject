@@ -15,6 +15,7 @@ import com.example.recyclerviewproject.network.DataApi
 import com.example.recyclerviewproject.network.RemoteDataSource
 import com.example.recyclerviewproject.network.Resource
 import com.example.recyclerviewproject.repository.DataRepository
+import com.example.recyclerviewproject.response.Data
 import com.google.gson.Gson
 
 class MainActivity : AppCompatActivity() {
@@ -46,6 +47,7 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerView.adapter=recyclerAdapter
 
         if(Json!=null && recyclerAdapter.itemCount==0){
+//            recyclerAdapter.setData(gson.fromJson(Json, mutableListOf<Data>()::class.java))
             recyclerAdapter.setDataUsingSharedPref(Json)
         }
         val factory = ViewModelFactory(DataRepository(RemoteDataSource.buildApi(DataApi::class.java)))

@@ -1,5 +1,8 @@
 package com.example.recyclerviewproject.response
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Data(
     val email: String,
     val gender: String,

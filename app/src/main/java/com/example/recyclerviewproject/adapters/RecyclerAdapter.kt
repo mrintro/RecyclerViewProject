@@ -12,6 +12,9 @@ import com.example.recyclerviewproject.R
 import com.example.recyclerviewproject.databinding.AdapterListBinding
 import com.example.recyclerviewproject.response.Data
 import com.google.gson.Gson
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class RecyclerAdapter (
     private var context: Context
@@ -19,26 +22,34 @@ class RecyclerAdapter (
 
     var data = mutableListOf<Data>()
     private var sharedPref = context.getSharedPreferences(R.string.data_path.toString(),Context.MODE_PRIVATE)
-
+    var tempdata = mutableListOf<Data>()
 
     @SuppressLint("NotifyDataSetChanged")
     @JvmName("setData1")
     fun setData(incomingData : List<Data>) {
         this.data = incomingData.toMutableList()
         notifyDataSetChanged()
-        val gson = Gson()
-        val json : String = gson.toJson(this.data)
+        val json = Json.encodeToString(this.data)
         with(sharedPref.edit()){
             putString("Saved Data", json)
             apply()
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun clearData() {
         this.data.clear()
+        with(sharedPref.edit()){
+            remove("Saved Data")
+            commit()
+        }
+        notifyDataSetChanged()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setDataUsingSharedPref(sharedPreferencesData: String){
+
+        this.data = Json.decodeFromString(sharedPreferencesData)
 
     }
 
