@@ -2,6 +2,7 @@ package com.example.recyclerviewproject.adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -35,6 +36,10 @@ class RecyclerAdapter (
 
     fun clearData() {
         this.data.clear()
+    }
+
+    fun setDataUsingSharedPref(sharedPreferencesData: String){
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {

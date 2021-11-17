@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-        var sharedPref = getSharedPreferences(R.string.data_path.toString(), Context.MODE_PRIVATE)
+        var sharedPref = getSharedPreferences(R.string.data_path.toString(), MODE_PRIVATE)
 
         val gson = Gson()
         val Json = sharedPref.getString("Saved Data",null)
@@ -40,9 +40,14 @@ class MainActivity : AppCompatActivity() {
             Log.d("Shared Pref", "JSON EMPTY")
         }
 
+        Log.d("LifeCycle","Inside OnCreate")
 
         recyclerAdapter = RecyclerAdapter(this)
         binding.recyclerView.adapter=recyclerAdapter
+
+        if(Json!=null && recyclerAdapter.itemCount==0){
+            recyclerAdapter.setDataUsingSharedPref(Json)
+        }
         val factory = ViewModelFactory(DataRepository(RemoteDataSource.buildApi(DataApi::class.java)))
         viewModel = ViewModelProvider(this, factory).get(DataViewModel::class.java)
 
