@@ -7,6 +7,6 @@ data class Data(
     val email: String,
     val gender: String,
     val id: Int,
-    val name: String,
+    var name: String,
     val status: String
 )

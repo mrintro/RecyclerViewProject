@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Adapter
 import androidx.recyclerview.widget.RecyclerView
@@ -16,9 +18,9 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-class RecyclerAdapter (
-    private var context: Context
-): RecyclerView.Adapter<MainViewHolder>() {
+class RecyclerAdapter(
+    private val context: Context
+) : RecyclerView.Adapter<MainViewHolder>() {
 
     var data = mutableListOf<Data>()
     private var sharedPref = context.getSharedPreferences(R.string.data_path.toString(),Context.MODE_PRIVATE)
@@ -64,6 +66,21 @@ class RecyclerAdapter (
         holder.binding.name.text = user.name
         holder.binding.email.text = user.email
         holder.binding.gender.text = user.gender
+        holder.binding.name.setOnClickListener{
+            holder.binding.name.visibility = View.GONE
+            holder.binding.editTextName.visibility = View.VISIBLE
+        }
+        holder.binding.editTextName.setOnKeyListener(View.OnKeyListener{ v, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN){
+                Log.d("event clicked", "enter key")
+                holder.binding.name.text = holder.binding.editTextName.text
+                holder.binding.editTextName.visibility = View.GONE
+                holder.binding.name.visibility = View.VISIBLE
+                data[position].name = holder.binding.editTextName.text.toString()
+                return@OnKeyListener true
+            }
+            false
+        })
     }
 
     override fun getItemCount(): Int {
